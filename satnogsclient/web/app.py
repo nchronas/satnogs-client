@@ -108,7 +108,7 @@ def get_command():
             ecss = {'app_id': int(requested_command['ecss_cmd']['PacketHeader']['PacketID']['ApplicationProcessID']),
                     'type': int(requested_command['ecss_cmd']['PacketHeader']['PacketID']['Type']),
                     'size' : 0,
-                    'seq_count' : 59,
+                    'seq_count' : 0,
                     'ser_type' : int(requested_command['ecss_cmd']['PacketDataField']['DataFieldHeader']['ServiceType']),
                     'ser_subtype' : int(requested_command['ecss_cmd']['PacketDataField']['DataFieldHeader']['ServiceSubType']),
                     'data' : map(int,requested_command['ecss_cmd']['PacketDataField']['ApplicationData']),
@@ -116,6 +116,14 @@ def get_command():
                     'ack': int(requested_command['ecss_cmd']['PacketDataField']['DataFieldHeader']['Ack'])}
             print "CMD", ecss
             print "data", ecss['data']
+
+            #check if ui wants a specific seq count
+            if 'SequenceCount' in requested_command['ecss_cmd']['PacketHeader']['PacketSequenceControl']:
+                print "seq count from ui"
+            #store packet for response check
+            if ecss['ack'] == '1':  
+                print "storing packet for verification"
+
             buf = packet.construct_packet(ecss)
             if requested_command['backend'] == 'serial':
                 print "CMD to Serial"

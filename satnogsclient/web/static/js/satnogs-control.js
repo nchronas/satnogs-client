@@ -472,7 +472,7 @@ $(document).ready(function() {
       }
     }
 
-    function encode_service(type, app_id, service_type, service_subtype, dest_id, ack, data) {
+    function encode_service(type, app_id, service_type, service_subtype, dest_id, ack, data, seq_count) {
         var DataFieldHeader = new Object();
         DataFieldHeader.CCSDSSecondaryHeaderFlag = '0';
         DataFieldHeader.TCPacketPUSVersionNumber = '1';
@@ -490,7 +490,11 @@ $(document).ready(function() {
 
         var PacketSequenceControl = new Object();
         PacketSequenceControl.SequenceFlags = '3';
-        PacketSequenceControl.SequenceCount = '59';
+        
+
+        if (typeof seq_count != "undefined") {
+            PacketSequenceControl.SequenceCount = seq_count;
+        }
 
         var PacketDataField = new Object();
         PacketDataField.DataFieldHeader = DataFieldHeader;
